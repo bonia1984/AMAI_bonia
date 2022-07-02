@@ -1,3 +1,8 @@
+Bonia1984_AI文件夹：
+适用于1.26版本的脚本，增强了AI的团战能力
+
+以下是原仓库内容：
+--------------------------------------------
 # AMAI
 Advanced Melee Artifical Intelligence Mod For Warcraft 3
 
