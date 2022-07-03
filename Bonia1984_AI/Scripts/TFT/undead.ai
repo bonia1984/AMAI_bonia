@@ -976,6 +976,7 @@ function chooseStrategyRP takes nothing returns nothing
   set rp_strat[STRAT_Ghouls] = -100
   set rp_strat[STRAT_Fiends] = -100
   set rp_strat[STRAT_MeatFiends] = -100
+  set rp_strat[STRAT_TempleMix] = -100
 
   if c_ally_total > 0 then
       set rp_strat[STRAT_NormalUndead] = rp_strat[STRAT_NormalUndead] + 0
@@ -1190,6 +1191,7 @@ function StrategyChanger takes nothing returns nothing
   set rp_strat[STRAT_Ghouls] = -100
   set rp_strat[STRAT_Fiends] = -100
   set rp_strat[STRAT_MeatFiends] = -100
+  set rp_strat[STRAT_TempleMix] = -100
 
   set rp[STRAT_NormalUndead] = rp[STRAT_NormalUndead] + 0 * enemy_air
   set rp[STRAT_Wyrms] = rp[STRAT_Wyrms] + 5 * enemy_air
@@ -3866,7 +3868,7 @@ function main takes nothing returns nothing
     set prio_n_inc = 2
     set prio_t_inc = 1
     set prio_q_inc = 2
-    set farm_food2 = -4
+    set farm_food2 = 3
     set farm_prio = 400
     set peon_prio = 280
     set expa_prio = 250

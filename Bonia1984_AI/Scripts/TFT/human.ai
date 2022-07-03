@@ -2043,7 +2043,7 @@ function global_build_sequence takes nothing returns nothing
 		call DefendTownsDone(1, ARCANE_VAULT, 20)
 
           call BuildAtMine(2, GUARD_TOWER, 20)
-			call BuildFront(6, GUARD_TOWER, 20)
+			call BuildFront(5, GUARD_TOWER, 20)
 			
 			call BuildAtMine(1, ARCANE_TOWER, 20)
 			call BuildFront(1, ARCANE_TOWER, 20)
@@ -2076,8 +2076,8 @@ function global_build_sequence takes nothing returns nothing
 	// TIER 1 UPGRADES
 	//--------------------------------------------------------
 		if tier == 1 then
-			call BuildUnit(2, HOUSE, 80)
-			call BuildUnit(1, LUMBER_MILL, 70)
+			//call BuildUnit(2, HOUSE, 80)
+			call BuildUnit(1, LUMBER_MILL, 30)
 		endif
         	call BuildAdvUpgr2(1, UPG_DEFEND, 1,TownCountDone(FOOTMAN), 0.33, 15, 60)
 		//if towerrush then
@@ -2155,6 +2155,7 @@ function global_build_sequence takes nothing returns nothing
           // Harass
           call Harass(1, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(FOOTMAN) > 6, 50, 80)
           call Harass(3, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(GRYPHON) > 4, 80, 100)
+		  call Harass(2, HARASS_TARGET_PEONS, false, 5, 0.00, 0, TownCountDone(FOOTMAN) >= 2, 10, 80)
 
 
 
@@ -2377,7 +2378,7 @@ endfunction
 //============================================================================
 function init_strategy_Gryph takes nothing returns nothing
 
-    call AddHarass(2, 1, GRYPHON)
+    call AddHarass(2, 2, FOOTMAN)
     set distraction_group = 2
 
 
@@ -2427,7 +2428,7 @@ function init_strategy_Rifle takes nothing returns nothing
     //call AddBlock(1, BLACKSMITH, false, 9, PEASANT, 60)
     //call AddBlock(1, BLACKSMITH, true, 0, ARCANE_VAULT, 60)
 
-    call AddHarass(2, 4, FOOTMAN)
+    call AddHarass(2, 2, FOOTMAN)
     set distraction_group = 2
 
 
@@ -2707,8 +2708,8 @@ endif
 endfunction
 
 function init_strategy_SanctumMix takes nothing returns nothing
-    call AddHarass(2, 2, RIFLEMAN)
-    call AddHarass(2, 4, FOOTMAN)
+    //call AddHarass(2, 2, RIFLEMAN)
+    call AddHarass(2, 2, FOOTMAN)
     set distraction_group = 2
 
 endfunction
@@ -3280,7 +3281,7 @@ function main takes nothing returns nothing
     set prio_n_inc = 2
     set prio_t_inc = 1
     set prio_q_inc = 2
-    set farm_food2 = 0
+    set farm_food2 = 3
     set farm_prio = 400
     set peon_prio = 280
     set expa_prio = 250

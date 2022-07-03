@@ -2195,10 +2195,10 @@ function global_build_sequence takes nothing returns nothing
 		if tier > 1 then
 		call DefendTownsDone(5, ORC_WATCH_TOWER, 10)
           call BuildAtMine(2, ORC_WATCH_TOWER, 15)
-			call BuildFront(6, ORC_WATCH_TOWER, 10)
+			call BuildFront(5, ORC_WATCH_TOWER, 10)
 		endif
 		
-	  call DefendTownsDone(1, BURROW, 50)
+	  call DefendTownsDone(1, BURROW, 40)
 
 	  
 
@@ -2531,7 +2531,7 @@ if tier == 3 then
 
 
 elseif tier == 2 then
-      call BuildUnit(5, GRUNT, 65)
+      call BuildUnit(10, GRUNT, 65)
       call BuildUnit(5, SPIRIT_WALKER, 60)
       call BuildUnit(10, SHAMAN, 60)
       call BuildUnit(1, FORTRESS, 60)
@@ -2659,6 +2659,7 @@ if tier == 3 then
 
 elseif tier == 2 then
 
+	  call BuildUnit(6, GRUNT, 40)
       call BuildUnit(10, WYVERN, 40)
       call BuildUnit(5, SHAMAN, 50)
       call BuildUnit(1, hero[1], 80)
@@ -4738,7 +4739,7 @@ function main takes nothing returns nothing
     set prio_n_inc = 2
     set prio_t_inc = 1
     set prio_q_inc = 2
-    set farm_food2 = -4
+    set farm_food2 = 3
     set farm_prio = 400
     set peon_prio = 280
     set expa_prio = 250

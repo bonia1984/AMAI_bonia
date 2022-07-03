@@ -2121,8 +2121,8 @@ function global_init_strategy takes nothing returns nothing
 endfunction
 function global_build_sequence takes nothing returns nothing
 	if tier > 1 then
-      call DefendTownsDone(5, ANCIENT_PROTECT, 10)
-	  call BuildFront(6, ANCIENT_PROTECT, 10)
+      call DefendTownsDone(4, ANCIENT_PROTECT, 10)
+	  call BuildFront(4, ANCIENT_PROTECT, 10)
 	  call BuildAtMine(2, ANCIENT_PROTECT, 35)
     endif
 	
@@ -5123,7 +5123,7 @@ function main takes nothing returns nothing
     set prio_n_inc = 2
     set prio_t_inc = 1
     set prio_q_inc = 2
-    set farm_food2 = -4
+    set farm_food2 = 3
     set farm_prio = 400
     set peon_prio = 280
     set expa_prio = 250
@@ -5132,7 +5132,7 @@ function main takes nothing returns nothing
     set peon_1_mine_number = 15
     set peon_2_mines_number = 20
     set peon_mines_number = 26
-    set min_peon_number_single_mine = 12
+    set min_peon_number_single_mine = 13
     set min_peon_number_double_mine = 16
     set min_peon_number_multi_mine = 20
     set strat_food_persistence = 3
