@@ -15183,23 +15183,25 @@ function set_aggression takes nothing returns nothing
   local integer f = FoodUsed()
   if false then
   elseif f >= 99 then
-    set added_aggression = 25
+    set added_aggression = 30//25
   elseif f >= 88 then
-    set added_aggression = 20
+    set added_aggression = 30//20
   elseif f >= 80 then
-    set added_aggression = 12
+    set added_aggression = 25//12
   elseif f >= 70 then
-    set added_aggression = 10
+    set added_aggression = 22//10
   elseif f >= 60 then
-    set added_aggression = 8
+    set added_aggression = 20//8
   elseif f >= 50 then
-    set added_aggression = 7
+    set added_aggression = 18//7
   elseif f >= 40 then
-    set added_aggression = 6
+    set added_aggression = 16//6
   elseif f >= 30 then
-    set added_aggression = 5
+    set added_aggression = 13//5
   elseif f >= 20 then
-    set added_aggression = 2
+    set added_aggression = 10 //2
+  elseif f >= 10 then
+	set added_aggression = 5 //0
   else
     set added_aggression = 0
   endif
@@ -20819,7 +20821,7 @@ function InitGlobalSettings takes nothing returns nothing
   set add_skill = false
   set fav_hero_add  = 10
   set max_harass_groups = 10
-  set attacking_aggression = 20
+  set attacking_aggression = 2
   set expansion_radius = 1000
   set harass_radius_attack_ranged = 800
   set harass_radius_attack_melee = 400
@@ -24680,8 +24682,9 @@ function IsTargetGood takes unit target, integer attacker_bonus returns boolean
   set added_racial_aggression = GetRaceAggression(target)
   if target != null then
 	call Trace("IsTargetGood: g_enemy_strength(" + Int2Str(g_enemy_strength) + ") g_ally_strength+own(" + Int2Str(g_ally_strength + own_strength) + ") GetTargetStrength("+ Int2Str(GetTargetStrength(target)) + ") GetTowerFactor/3(" + Int2Str(GetTowerFactor(target) / 3) + ") own_strength(" + Int2Str(own_strength) + ") aggresss(" + Int2Str(attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus) + ")")
-	return own_strength > 6 and g_enemy_strength <= g_ally_strength + own_strength and GetTargetStrength(target) + GetTowerFactor(target) / 3 <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
-
+	//return g_enemy_strength <= g_ally_strength + own_strength and GetTargetStrength(target) + GetTowerFactor(target) / 3 <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
+	return GetTargetStrength(target) + GetTowerFactor(target) / 3 <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
+	//attacking_aggression:fixed+player;   set_aggression:set_aggression() by foodused;   added_racial_aggression:?    attacker_bonus:player p_comp_chosen_target_bonus
 	//return GetTargetStrength(target) + GetEnemyAllyStrength(GetOwningPlayer(target)) + GetTowerFactor(target) <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
   else
 	return false
@@ -24736,17 +24739,24 @@ function ChooseAnyEnemyTarget takes nothing returns unit
 	
     if attacking_strategy == 1 or attacking_strategy == 3 then
       set target_enemy = GetWeakestEnemy()
-	  //call Trace("Chooing Weakest Enemy")
+	  call Trace("Chooing Weakest Enemy")
     elseif attacking_strategy == 2 then
       set target_enemy = GetStrongestEnemy()
-	  //call Trace("Choosing Strongest Enemy")
+	  call Trace("Choosing Strongest Enemy")
     elseif attacking_strategy == 5 then
       set target_enemy = GetFFAEnemy()
-	  //call Trace("Choosing FFA Enemy")	  
+	  call Trace("Choosing FFA Enemy")	  
     else
       set target_enemy = GetWeakAndNearEnemy()
-	  //call Trace("Choosing weakest closest Enemy")
+	  call Trace("Choosing weakest closest Enemy")
     endif
+	
+	//if GetRandomInt(0,2) == 0 then
+		//set target_enemy = GetWeakAndNearEnemy()
+	//else
+		//set target_enemy = GetStrongestEnemy()
+	//endif
+	
 	call GroupEnumUnitsOfPlayer(g, target_enemy, null)
 	set enemy_base = GetPlayerStartLocationLoc(target_enemy)
 	set g = SelectUnittype(g, UNIT_TYPE_TOWNHALL, true)
@@ -24785,7 +24795,7 @@ function ChooseAttackTarget takes nothing returns unit
 			//call Trace("ChooseEnemyExpansionTarget:ChooseEnemyExpansionTarget=null")
 			set target = ChooseEnemyExpansionTarget()
 		endif
-		set alli_target = target	
+			
     endif	
 
     if target == null then
@@ -24793,6 +24803,8 @@ function ChooseAttackTarget takes nothing returns unit
     endif
 	if target == null then
 		call Trace("ChooseAttackTarget:target=null")
+	else
+		set alli_target = target
 	endif
     return target
 endfunction
@@ -25025,7 +25037,7 @@ function SingleMeleeAttackAM takes boolean needs_exp, boolean has_siege, integer
       endif
     endif
 
-	if not creeping_only then	// Do the normal attack sequence
+if not creeping_only then	// Do the normal attack sequence
 	
    // militia expansion
    //
@@ -25047,7 +25059,7 @@ function SingleMeleeAttackAM takes boolean needs_exp, boolean has_siege, integer
 
     // ancient expansion attack
     //
-       if ancient_expanding then
+    if ancient_expanding then
 		if ancient_exp_state == 2 or ancient_exp_state == 3 then
             call Trace("An Ancient Expansion Attack")
             //call FormGroupAM(3)
@@ -25055,7 +25067,7 @@ function SingleMeleeAttackAM takes boolean needs_exp, boolean has_siege, integer
 			call SetCaptainHome(BOTH_CAPTAINS,GetUnitX(ancient_exp_unit),GetUnitY(ancient_exp_unit))
 			//call AttackMoveKillXYAAM(R2I(GetUnitX(ancient_exp_unit)), R2I(GetUnitY(ancient_exp_unit)))
             return
-            elseif ancient_exp_state == 4 then
+        elseif ancient_exp_state == 4 then
 				set ancient_attack_running = true
                 call Trace("An Ancient Expansion - Final stage")
                 call FormGroupAM(3)
@@ -25068,8 +25080,8 @@ function SingleMeleeAttackAM takes boolean needs_exp, boolean has_siege, integer
 				//endif
 				set ancient_attack_running = false
                 return
-            endif
-       endif
+        endif
+    endif
 	   
 	   
     // defend expansion from other expansion
@@ -25086,6 +25098,69 @@ function SingleMeleeAttackAM takes boolean needs_exp, boolean has_siege, integer
       return
     endif
     
+
+
+    // coordinate with allies
+    //
+	if c_ally_total > 0 then
+		call SetLeadAlly()
+		if MeleeDifficulty() != MELEE_NEWBIE then
+			set common = GetAllianceTarget()
+			if common != null then
+				call Trace("Attack Alliance Target")
+				call Chat(C_Ally)
+				call FormGroupAM(3)
+				call AttackMoveKillAAM(common)
+				call Trace("Attack complete")
+				call SetAllianceTarget(null)
+				return
+			endif
+		endif
+	endif
+
+    if not no_player_attack then
+
+      // all-out attack if the player is weak
+      //
+		if MeleeDifficulty() != MELEE_NEWBIE then
+			set mega = GetMegaTarget()
+			if mega != null and UnitAlive(mega) then
+				call Trace("Mega Attack Target")
+				call SetAllianceTarget(mega)		
+				call SetChatVarsAttack(mega)
+				call Chat(C_Mega)
+				call Chat(C_Megatarget)
+				call FormGroupAM(3)
+				call AttackMoveKillAAM(mega)
+				return
+			endif
+		endif
+	  
+	  
+      //if GetHeroXP(hero_unit[1]) < GetRandomInt(50,150) or GetHeroXP(hero_unit[1]) > GetRandomInt(300,850) or GetHeroXP(hero_unit[2]) > 450 or FoodUsed() > 40 then
+		
+		if GetHeroXP(hero_unit[1]) > 0 then 
+		
+			set hall = ChooseAttackTarget()
+			if hall == null then 
+				//call Trace("=before chooseattcktarget failed:hall=null")		
+			elseif not UnitAlive(hall) then
+				//call Trace("=before chooseattcktarget failed:UnitAlive")
+			endif
+		
+			if hall != null and UnitAlive(hall) then
+				call SetChatVarsAttack(hall)
+				call Chat(C_Attack)
+				call SetAllianceTarget(alli_target)
+				//set alli_target = null
+				call FormGroupAM(3)
+				call AttackMoveKillAAM(hall)
+				return		
+			endif
+
+		endif
+    endif
+	
     if not (no_creep_attack or ai_no_creep) then
 
       // take expansions as needed
@@ -25117,69 +25192,7 @@ function SingleMeleeAttackAM takes boolean needs_exp, boolean has_siege, integer
 
     endif
 
-    // coordinate with allies
-    //
-	if c_ally_total > 0 then
-	call SetLeadAlly()
-    if MeleeDifficulty() != MELEE_NEWBIE then
-      set common = GetAllianceTarget()
-      if common != null then
-	    call Trace("Attack Alliance Target")
-        call Chat(C_Ally)
-        call FormGroupAM(3)
-        call AttackMoveKillAAM(common)
-        call Trace("Attack complete")
-        call SetAllianceTarget(null)
-        return
-      endif
-    endif
-	endif
-
-    if not no_player_attack then
-
-      // all-out attack if the player is weak
-      //
-	if MeleeDifficulty() != MELEE_NEWBIE then
-      set mega = GetMegaTarget()
-      if mega != null and UnitAlive(mega) then
-        call Trace("Mega Attack Target")
-			call SetAllianceTarget(mega)		
-        call SetChatVarsAttack(mega)
-        call Chat(C_Mega)
-        call Chat(C_Megatarget)
-        call FormGroupAM(3)
-        call AttackMoveKillAAM(mega)
-        return
-      endif
-	endif
-	  
-	  
-      //if GetHeroXP(hero_unit[1]) < GetRandomInt(50,150) or GetHeroXP(hero_unit[1]) > GetRandomInt(300,850) or GetHeroXP(hero_unit[2]) > 450 or FoodUsed() > 40 then
-		
-		if GetHeroXP(hero_unit[1]) > 0 then 
-		
-        set hall = ChooseAttackTarget()
-		if hall == null then 
-			//call Trace("=before chooseattcktarget failed:hall=null")		
-		elseif not UnitAlive(hall) then
-			//call Trace("=before chooseattcktarget failed:UnitAlive")
-		endif
-		
-        if hall != null and UnitAlive(hall) then
-          call SetChatVarsAttack(hall)
-          call Chat(C_Attack)
-            call SetAllianceTarget(alli_target)
-            //set alli_target = null
-          call FormGroupAM(3)
-          call AttackMoveKillAAM(hall)
-          return
-		
-        endif
-
-      endif
-    endif
-
-	endif // if not creep only
+endif // if not creep only
 	
     if no_creep_attack or ai_no_creep then
       call Trace("no creeping" )

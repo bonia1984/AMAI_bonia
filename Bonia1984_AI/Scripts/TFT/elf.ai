@@ -1072,7 +1072,10 @@ function chooseStrategyRP takes nothing returns nothing
   set rp_strat[STRAT_Archer] = -100
   set rp_strat[STRAT_MassHuntress] = -100
   set rp_strat[STRAT_AoWMix] = -100
-  
+  set rp_strat[STRAT_DynamicTest] = -100
+  set rp_strat[STRAT_MGDryads] = -100
+  set rp_strat[STRAT_NEAntiTower] = -100
+
   if c_ally_total > 0 then
       set rp_strat[STRAT_NormalElf] = rp_strat[STRAT_NormalElf] + 0
       set rp_strat[STRAT_MassHD] = rp_strat[STRAT_MassHD] + 0
@@ -1319,15 +1322,6 @@ function StrategyChanger takes nothing returns nothing
   call chooseStrategyRP()
   call normalize_rp_strat()  // Makes priority much larger so the extra bonuses do not make as much of a difference
 
-  set rp_strat[STRAT_NormalElf] = -100
-  set rp_strat[STRAT_MassHD] = -100
-  set rp_strat[STRAT_Hippo] = -100
-  set rp_strat[STRAT_Ballista] = -100
-  set rp_strat[STRAT_Talon] = -100
-  set rp_strat[STRAT_Archer] = -100
-  set rp_strat[STRAT_MassHuntress] = -100
-  set rp_strat[STRAT_AoWMix] = -100
-
   set rp[STRAT_NormalElf] = rp[STRAT_NormalElf] + 0 * enemy_air
   set rp[STRAT_MassHD] = rp[STRAT_MassHD] + 0 * enemy_air
   set rp[STRAT_Druids] = rp[STRAT_Druids] + 0 * enemy_air
@@ -1521,6 +1515,18 @@ function StrategyChanger takes nothing returns nothing
   set rp_strat[STRAT_AoLMix] = rp_strat[STRAT_AoLMix] + R2I(rp[STRAT_AoLMix])
   set rp_strat[STRAT_NEAntiTower] = rp_strat[STRAT_NEAntiTower] + R2I(rp[STRAT_NEAntiTower])
   set rp_strat[STRAT_DynamicTest] = rp_strat[STRAT_DynamicTest] + R2I(rp[STRAT_DynamicTest])
+
+  set rp_strat[STRAT_NormalElf] = -100
+  set rp_strat[STRAT_MassHD] = -100
+  set rp_strat[STRAT_Hippo] = -100
+  set rp_strat[STRAT_Ballista] = -100
+  set rp_strat[STRAT_Talon] = -100
+  set rp_strat[STRAT_Archer] = -100
+  set rp_strat[STRAT_MassHuntress] = -100
+  set rp_strat[STRAT_AoWMix] = -100
+  set rp_strat[STRAT_DynamicTest] = -100
+  set rp_strat[STRAT_MGDryads] = -100
+  set rp_strat[STRAT_NEAntiTower] = -100
 
   call finish_strategy_change()
 endfunction
@@ -2121,8 +2127,8 @@ function global_init_strategy takes nothing returns nothing
 endfunction
 function global_build_sequence takes nothing returns nothing
 	if tier > 1 then
-      call DefendTownsDone(4, ANCIENT_PROTECT, 10)
-	  call BuildFront(4, ANCIENT_PROTECT, 10)
+      call DefendTownsDone(6, ANCIENT_PROTECT, 10)
+	  call BuildFront(6, ANCIENT_PROTECT, 10)
 	  call BuildAtMine(2, ANCIENT_PROTECT, 35)
     endif
 	
@@ -2203,7 +2209,7 @@ function global_build_sequence takes nothing returns nothing
       call BuildUnit(1, SHREDDER, 70)
 
       // Harassing
-      call Harass(1, HARASS_TARGET_PEONS, true, 4, 0.75, 0, TownCountDone(HUNTRESS) >=2, 50, 80)
+      call Harass(1, HARASS_TARGET_PEONS, false, 10, 0.00, 0, TownCountDone(HUNTRESS) >= 2, 50, 80)
       call Harass(3, HARASS_TARGET_PEONS, true, 4, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(FAERIE_DRAGON) > 2, 50, 80)
 
 
@@ -2570,9 +2576,9 @@ endfunction
 //============================================================================
 function init_strategy_Druids takes nothing returns nothing
 
-    call AddHarass(2, 3, DRUID_CLAW)
-    call AddHarass(2, 2, DRYAD)
-	//call AddHarass(1, 2, HUNTRESS)
+    //call AddHarass(2, 3, DRUID_CLAW)
+    //call AddHarass(2, 2, DRYAD)
+	call AddHarass(1, 2, HUNTRESS)
     set distraction_group = 2
 
 
@@ -2644,6 +2650,7 @@ elseif tier == 2 then
       call BuildUnit(10, DRUID_TALON, 45)
       call BuildUnit(5, DRUID_CLAW, 55)
       call BuildUnit(6, DRYAD, 53)
+	  call BuildUnit(2, HUNTRESS, 52)
       call BuildUnit(1, TREE_ETERNITY, 80)
       call BuildUnit(1, hero[1], 80)
       call BuildUnit(1, hero[2], 60)
@@ -2679,9 +2686,9 @@ elseif tier == 2 then
 
 
 else
-
+	
       call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(1, HUNTRESS, 52)
+      call BuildUnit(2, HUNTRESS, 52)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -3150,8 +3157,7 @@ endfunction
 //  build_sequence
 //============================================================================
 function init_strategy_HippoChim takes nothing returns nothing
-
-    call AddHarass(2, 5, ARCHER)
+    call AddHarass(1, 2, HUNTRESS)
     set distraction_group = 2
 
 
@@ -3229,6 +3235,7 @@ elseif tier == 2 then
 
       call BuildUnit(4, FAERIE_DRAGON, 40)
       call BuildUnit(6, ARCHER, 35)
+	  call BuildUnit(6, HUNTRESS, 52)
       call BuildUnit(2, HIPPO, 50)
       call BuildUnit(8, HIPPO_RIDER, 40)
       call BuildUnit(1, TREE_ETERNITY, 35)
@@ -3271,7 +3278,7 @@ elseif tier == 2 then
 else
 
       call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(1, HUNTRESS, 52)
+      call BuildUnit(2, HUNTRESS, 52)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -3312,8 +3319,7 @@ endfunction
 //============================================================================
 function init_strategy_DryadChim takes nothing returns nothing
 
-    call AddHarass(2, 5, ARCHER)
-    call AddHarass(2, 3, DRYAD)
+    call AddHarass(1, 2, HUNTRESS)
     set distraction_group = 2
 
 
@@ -3395,6 +3401,7 @@ elseif tier == 2 then
 
       call BuildUnit(4, ARCHER, 40)
       call BuildUnit(4, DRYAD, 46)
+	  call BuildUnit(6, HUNTRESS, 52)
       call BuildUnit(1, TREE_ETERNITY, 50)
       call BuildUnit(1, hero[1], 20)
       call BuildUnit(1, hero[2], 10)
@@ -3436,7 +3443,7 @@ elseif tier == 2 then
 else
 
       call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(1, HUNTRESS, 52)
+      call BuildUnit(2, HUNTRESS, 52)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -3603,7 +3610,7 @@ endfunction
 //============================================================================
 function init_strategy_DotC takes nothing returns nothing
 
-    call AddHarass(2, 3, ARCHER)
+    call AddHarass(1, 2, HUNTRESS)
     set distraction_group = 2
 
 
@@ -3671,6 +3678,7 @@ elseif tier == 2 then
 
       call BuildUnit(1, MOUNTAIN_GIANT, 60)
       call BuildUnit(6, ARCHER, 44)
+	  call BuildUnit(6, HUNTRESS, 52)
       call BuildUnit(8, DRUID_CLAW, 40)
       call BuildUnit(1, TREE_ETERNITY, 10)
       call BuildUnit(1, hero[1], 80)
@@ -3705,7 +3713,7 @@ elseif tier == 2 then
 else
 
       call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(1, HUNTRESS, 52)
+      call BuildUnit(2, HUNTRESS, 52)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -4214,7 +4222,7 @@ endfunction
 
 function init_strategy_AoLMix takes nothing returns nothing
 
-    call AddHarass(2, 5, DRYAD)
+    call AddHarass(1, 2, HUNTRESS)
     set distraction_group = 2
 
 
@@ -4317,6 +4325,7 @@ elseif tier == 2 then
 
       call SetBuildReact(15, 2, DRYAD, 1, MOUNTAIN_GIANT, (enemy_towers + enemy_piercing - enemy_casters - enemy_normal), 4, 25, 60)
       call SetBuildReact(40, 1, DRUID_CLAW, 2, DRYAD, (enemy_unarmored + enemy_air + (enemy_magic * 2) + enemy_normal - enemy_piercing - enemy_siege)/3, 4, 25, 40)
+	  call BuildUnit(2, HUNTRESS, 52)
       call BuildUnit(1, TREE_ETERNITY, 35)
       call BuildUnit(1, hero[1], 80)
       call BuildUnit(1, hero[2], 60)
@@ -4369,7 +4378,7 @@ elseif tier == 2 then
 else
 
       call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(1, HUNTRESS, 52)
+      call BuildUnit(2, HUNTRESS, 52)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -4429,7 +4438,7 @@ function init_strategy_NEAntiTower takes nothing returns nothing
 
 
 
-    call AddHarass(2, 2, CHIMAERA)
+    call AddHarass(1, 2, HUNTRESS)
     set distraction_group = 2
 
 
@@ -5132,7 +5141,7 @@ function main takes nothing returns nothing
     set peon_1_mine_number = 15
     set peon_2_mines_number = 20
     set peon_mines_number = 26
-    set min_peon_number_single_mine = 13
+    set min_peon_number_single_mine = 14
     set min_peon_number_double_mine = 16
     set min_peon_number_multi_mine = 20
     set strat_food_persistence = 3

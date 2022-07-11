@@ -2038,16 +2038,21 @@ function global_init_strategy takes nothing returns nothing
 
 endfunction
 function global_build_sequence takes nothing returns nothing
-	    call DefendTownsDone(4, GUARD_TOWER, 30)
+	
+	call BuildUnit(2, HOUSE, 70)
+	call BuildUnit(3, BARRACKS, 50)
+	
+	if tier >= 2 then
+	    call DefendTownsDone(4, GUARD_TOWER, 40)
 		call DefendTownsDone(1, ARCANE_TOWER, 20)
 		call DefendTownsDone(1, ARCANE_VAULT, 20)
 
-          call BuildAtMine(2, GUARD_TOWER, 20)
-			call BuildFront(5, GUARD_TOWER, 20)
+        call BuildAtMine(2, GUARD_TOWER, 20)
+		call BuildFront(6, GUARD_TOWER, 40)
 			
-			call BuildAtMine(1, ARCANE_TOWER, 20)
-			call BuildFront(1, ARCANE_TOWER, 20)
-
+		call BuildAtMine(1, ARCANE_TOWER, 20)
+		call BuildFront(1, ARCANE_TOWER, 20)
+	endif
           // Anti rush
           if GetRushFactor() < 5000 then
             //call BuildUnit(2, ARCANE_TOWER, 60)
@@ -2155,65 +2160,7 @@ function global_build_sequence takes nothing returns nothing
           // Harass
           call Harass(1, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(FOOTMAN) > 6, 50, 80)
           call Harass(3, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(GRYPHON) > 4, 80, 100)
-		  call Harass(2, HARASS_TARGET_PEONS, false, 5, 0.00, 0, TownCountDone(FOOTMAN) >= 2, 10, 80)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		  call Harass(2, HARASS_TARGET_PEONS, false, 10, 0.00, 0, TownCountDone(FOOTMAN) >= 2, 10, 80)
 
 
 
@@ -2414,7 +2361,7 @@ else
 	call BuildUnit(1, hero[1], 80)
 	//call BuildUnit(12, FOOTMAN, 60)
         call SetBuildReact(16, 4, FOOTMAN, 0, RIFLEMAN, (enemy_unarmored + (enemy_lightarmor * 2) + enemy_air + enemy_magic - (enemy_normal * 2)), 4, 25, 38) 
-        call BuildUnit(1, KEEP, 50)
+        call BuildUnit(1, KEEP, 38)
 
 
 endif
@@ -2464,9 +2411,9 @@ else
 
       call BuildUnit(1, hero[1], 80)
 	  //call BuildUnit(12, RIFLEMAN, 60)
-      call SetBuildReact(16, 4, FOOTMAN, 0, RIFLEMAN, (enemy_unarmored + (enemy_lightarmor * 2) + enemy_air + enemy_magic - (enemy_normal * 2)), 4, 25, 60) 
+      call SetBuildReact(16, 4, FOOTMAN, 0, RIFLEMAN, (enemy_unarmored + (enemy_lightarmor * 2) + enemy_air + enemy_magic - (enemy_normal * 2)), 4, 25, 38) 
       //call BuildUnit(1, hero[1], 80)
-      call BuildUnit(1, KEEP,50)
+      call BuildUnit(1, KEEP,38)
 
 
 endif
@@ -2756,7 +2703,7 @@ else
       call BuildUnit(1, hero[1], 80)
 	  //call BuildUnit(12, FOOTMAN, 60)
         call SetBuildReact(16, 4, FOOTMAN, 0, RIFLEMAN, (enemy_unarmored + (enemy_lightarmor * 2) + enemy_air + enemy_magic - (enemy_normal * 2)), 4, 25, 38) 
-        call BuildUnit(1, KEEP, 50)
+        call BuildUnit(1, KEEP, 38)
 
 
 

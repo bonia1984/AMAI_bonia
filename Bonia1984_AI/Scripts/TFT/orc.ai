@@ -1103,10 +1103,13 @@ function chooseStrategyRP takes nothing returns nothing
   set rp_strat[STRAT_HeadCatapults] = -100
   set rp_strat[STRAT_BarrackMix] = -100
   set rp_strat[STRAT_BestiaryMix] = -100
+  set rp_strat[STRAT_Wyvern] = -100
   set rp_strat[STRAT_OAntiTower] = -100
   set rp_strat[STRAT_VersusHuman] = -100
   set rp_strat[STRAT_VersusUndead] = -100
   set rp_strat[STRAT_VersusElf] = -100
+  set rp_strat[STRAT_DynamoO] = -100
+  set rp_strat[STRAT_AntiPierce] = -100
 
   if c_ally_total > 0 then
       set rp_strat[STRAT_NormalOrc] = rp_strat[STRAT_NormalOrc] + 0
@@ -1366,18 +1369,6 @@ function StrategyChanger takes nothing returns nothing
   call chooseStrategyRP()
   call normalize_rp_strat()  // Makes priority much larger so the extra bonuses do not make as much of a difference
 
-  set rp_strat[STRAT_NormalOrc] = -100
-  set rp_strat[STRAT_HHunters] = -100
-  set rp_strat[STRAT_Raiders] = -100
-  set rp_strat[STRAT_GruntCatapults] = -100
-  set rp_strat[STRAT_HeadCatapults] = -100
-  set rp_strat[STRAT_BarrackMix] = -100
-  set rp_strat[STRAT_BestiaryMix] = -100
-  set rp_strat[STRAT_OAntiTower] = -100
-  set rp_strat[STRAT_VersusHuman] = -100
-  set rp_strat[STRAT_VersusUndead] = -100
-  set rp_strat[STRAT_VersusElf] = -100
-
   set rp[STRAT_NormalOrc] = rp[STRAT_NormalOrc] + 0 * enemy_air
   set rp[STRAT_FastSh] = rp[STRAT_FastSh] + -5 * enemy_air
   set rp[STRAT_WyvSh] = rp[STRAT_WyvSh] + 5 * enemy_air
@@ -1584,6 +1575,21 @@ function StrategyChanger takes nothing returns nothing
   set rp_strat[STRAT_VersusElf] = rp_strat[STRAT_VersusElf] + R2I(rp[STRAT_VersusElf])
   set rp_strat[STRAT_DynamoO] = rp_strat[STRAT_DynamoO] + R2I(rp[STRAT_DynamoO])
 
+  set rp_strat[STRAT_NormalOrc] = -100
+  set rp_strat[STRAT_HHunters] = -100
+  set rp_strat[STRAT_Raiders] = -100
+  set rp_strat[STRAT_GruntCatapults] = -100
+  set rp_strat[STRAT_HeadCatapults] = -100
+  set rp_strat[STRAT_BarrackMix] = -100
+  set rp_strat[STRAT_BestiaryMix] = -100
+  set rp_strat[STRAT_Wyvern] = -100
+  set rp_strat[STRAT_OAntiTower] = -100
+  set rp_strat[STRAT_VersusHuman] = -100
+  set rp_strat[STRAT_VersusUndead] = -100
+  set rp_strat[STRAT_VersusElf] = -100
+  set rp_strat[STRAT_DynamoO] = -100
+  set rp_strat[STRAT_AntiPierce] = -100
+  
   call finish_strategy_change()
 endfunction
 
@@ -2192,13 +2198,15 @@ function global_init_strategy takes nothing returns nothing
 
 endfunction
 function global_build_sequence takes nothing returns nothing
+
+	call BuildUnit(2, BURROW, 70)
+	call BuildUnit(3, ORC_BARRACKS, 50)
+	
 		if tier > 1 then
-		call DefendTownsDone(5, ORC_WATCH_TOWER, 10)
+		call DefendTownsDone(6, ORC_WATCH_TOWER, 20)
           call BuildAtMine(2, ORC_WATCH_TOWER, 15)
-			call BuildFront(5, ORC_WATCH_TOWER, 10)
-		endif
-		
-	  call DefendTownsDone(1, BURROW, 40)
+			call BuildFront(6, ORC_WATCH_TOWER, 20)
+		endif	
 
 	  
 
@@ -2280,60 +2288,7 @@ function global_build_sequence takes nothing returns nothing
           call Harass(1, HARASS_TARGET_PEONS, true, 4, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(GRUNT) >= 2, 40, 80)
           call Harass(3, HARASS_TARGET_PEONS, true, 5, 0.85, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(WYVERN) > 4, 120, 160)
 	  call Harass(4, HARASS_TARGET_PEONS, false, 12, 0.25, 0, hero[1] == BLADE_MASTER and hero_skills[1] == HERO_SKILL_MINOR and not towerrush and GetPlayerRace(nearest_enemy) != RACE_UNDEAD, 36, 150)
-          call Harass(2, HARASS_TARGET_PEONS, true, 4, 0.75, 0, TownCountDone(GRUNT) >= 2, 40, 80)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          call Harass(2, HARASS_TARGET_PEONS, false, 10, 0.00, 0, TownCountDone(GRUNT) >= 2 or TownCountDone(WYVERN) >= 2 or TownCountDone(HEAD_HUNTER) >= 2, 40, 80)
 
 
 
@@ -2471,7 +2426,7 @@ endfunction
 //============================================================================
 function init_strategy_FastSh takes nothing returns nothing
 
-    call AddHarass(2, 1, TAUREN)
+    call AddHarass(2, 2, GRUNT)
     set distraction_group = 2
 
 
@@ -2531,7 +2486,7 @@ if tier == 3 then
 
 
 elseif tier == 2 then
-      call BuildUnit(10, GRUNT, 65)
+      call BuildUnit(6, GRUNT, 65)
       call BuildUnit(5, SPIRIT_WALKER, 60)
       call BuildUnit(10, SHAMAN, 60)
       call BuildUnit(1, FORTRESS, 60)
@@ -2565,7 +2520,7 @@ else
 
       	call BuildUnit(1, hero[1], 80)
       	call BuildUnit(10, GRUNT, 40)
-        call BuildUnit(1, STRONGHOLD, 50)
+        call BuildUnit(1, STRONGHOLD, 38)
 
 
 
@@ -2623,7 +2578,7 @@ endfunction
 function build_sequence_WyvSh takes nothing returns nothing
 if tier == 3 then
 
-      call BuildUnit(14, WYVERN, 42)
+      call BuildUnit(18, WYVERN, 42)
       call BuildUnit(8, SHAMAN, 54)
       call BuildUnit(1, hero[1], 80)
       call BuildUnit(1, hero[2], 60)
@@ -2699,7 +2654,7 @@ else
 
 	call BuildUnit(1, hero[1], 80)
 	call BuildUnit(10, GRUNT, 40)
-        call BuildUnit(1, STRONGHOLD, 50)
+        call BuildUnit(1, STRONGHOLD, 38)
 
 
 
@@ -3174,7 +3129,7 @@ endfunction
 //init_strategy_Wyvern
 function init_strategy_Wyvern takes nothing returns nothing
 
-    call AddHarass(2, 1, WYVERN)
+    call AddHarass(2, 2, WYVERN)
     set distraction_group = 2
 
 
@@ -3229,6 +3184,7 @@ call BuildUnit(1, VOODOO_LOUNGE, 50)
 
 elseif tier == 2 then
 call BuildUnit(18, WYVERN, 40)
+call BuildUnit(6, GRUNT, 40)
 call BuildUnit(1, hero[1], 80)
 call BuildUnit(1, hero[2], 40)
 call BuildUnit(1, FORTRESS, 20)
@@ -3260,7 +3216,7 @@ else
 
 	call BuildUnit(1, hero[1], 80)
 	call BuildUnit(10, GRUNT, 40)
-        call BuildUnit(1, STRONGHOLD, 50)
+        call BuildUnit(1, STRONGHOLD, 38)
 
 
 
@@ -3630,7 +3586,6 @@ endfunction
 function init_strategy_AntiPierce takes nothing returns nothing
 
     call AddHarass(2, 2, GRUNT)
-    call AddHarass(2, 1, SHAMAN)
     set distraction_group = 2
 
 
@@ -3683,7 +3638,7 @@ else
       
       call BuildUnit(10, GRUNT, 50)
       call BuildUnit(1, hero[1], 80)
-      call BuildUnit(1, STRONGHOLD, 60)
+      call BuildUnit(1, STRONGHOLD, 38)
 
 
 
@@ -3699,8 +3654,8 @@ endfunction
 
 function init_strategy_AntiAir takes nothing returns nothing
 
-    call AddHarass(2, 3, HEAD_HUNTER)
-    call AddHarass(2, 3, WYVERN)
+    call AddHarass(2, 2, HEAD_HUNTER)
+    call AddHarass(2, 2, WYVERN)
     set distraction_group = 2
 
 
@@ -3723,11 +3678,12 @@ if tier == 3 then
       call BuildUnit(1, hero[1], 80)
       call BuildUnit(1, hero[2], 60)
       call BuildUnit(15, WYVERN, 50)
-      call BuildUnit(15, BATRIDER, 55)
+      call BuildUnit(12, BATRIDER, 55)
+	  call BuildUnit(4, SHAMAN, 54)
+
       call BuildUnit(1, VOODOO_LOUNGE, 50)
-
-
-
+      call BuildUpgr(2, UPG_ORC_SHAMAN, 70)
+      call BuildUpgr(1, UPG_ORC_VENOM, 70)
 
 
 
@@ -3743,8 +3699,9 @@ elseif tier == 2 then
 
       call BuildUnit(1, hero[1], 80)
       call BuildUnit(1, hero[2], 60)
+	  call BuildUnit(6, HEAD_HUNTER, 38)
       call BuildUnit(10, WYVERN, 50)
-      call BuildUnit(15, BATRIDER, 55)
+      call BuildUnit(10, BATRIDER, 55)
       call BuildUnit(1, FORTRESS, 50)
       call BuildUnit(1, VOODOO_LOUNGE, 50)
 
@@ -3765,7 +3722,7 @@ else
       
       call BuildUnit(12, HEAD_HUNTER, 38)
       call BuildUnit(1, hero[1], 80)
-      call BuildUnit(1, STRONGHOLD, 50)
+      call BuildUnit(1, STRONGHOLD, 38)
 
 
 

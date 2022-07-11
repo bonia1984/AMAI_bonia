@@ -1188,10 +1188,6 @@ function StrategyChanger takes nothing returns nothing
   call chooseStrategyRP()
   call normalize_rp_strat()  // Makes priority much larger so the extra bonuses do not make as much of a difference
 
-  set rp_strat[STRAT_Ghouls] = -100
-  set rp_strat[STRAT_Fiends] = -100
-  set rp_strat[STRAT_MeatFiends] = -100
-  set rp_strat[STRAT_TempleMix] = -100
 
   set rp[STRAT_NormalUndead] = rp[STRAT_NormalUndead] + 0 * enemy_air
   set rp[STRAT_Wyrms] = rp[STRAT_Wyrms] + 5 * enemy_air
@@ -1351,6 +1347,11 @@ function StrategyChanger takes nothing returns nothing
   set rp_strat[STRAT_TempleMix] = rp_strat[STRAT_TempleMix] + R2I(rp[STRAT_TempleMix])
   set rp_strat[STRAT_UAntiTower] = rp_strat[STRAT_UAntiTower] + R2I(rp[STRAT_UAntiTower])
 
+  set rp_strat[STRAT_Ghouls] = -100
+  set rp_strat[STRAT_Fiends] = -100
+  set rp_strat[STRAT_MeatFiends] = -100
+  set rp_strat[STRAT_TempleMix] = -100
+  
   call finish_strategy_change()
 endfunction
 
