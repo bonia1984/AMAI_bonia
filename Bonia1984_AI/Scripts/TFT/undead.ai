@@ -973,10 +973,16 @@ function chooseStrategyRP takes nothing returns nothing
     call mult_rp_strat(3)
   endif
 
+  set rp_strat[STRAT_NormalUndead] = -100
+  set rp_strat[STRAT_Banshee] = -100
+  set rp_strat[STRAT_Necro] = -100
   set rp_strat[STRAT_Ghouls] = -100
   set rp_strat[STRAT_Fiends] = -100
+  set rp_strat[STRAT_Aboms] = -100
   set rp_strat[STRAT_MeatFiends] = -100
-  set rp_strat[STRAT_TempleMix] = -100
+  set rp_strat[STRAT_MassDestroyer] = -100
+  set rp_strat[STRAT_CryptMix] = -100
+  set rp_strat[STRAT_UAntiTower] = -100
 
   if c_ally_total > 0 then
       set rp_strat[STRAT_NormalUndead] = rp_strat[STRAT_NormalUndead] + 0
@@ -1347,10 +1353,16 @@ function StrategyChanger takes nothing returns nothing
   set rp_strat[STRAT_TempleMix] = rp_strat[STRAT_TempleMix] + R2I(rp[STRAT_TempleMix])
   set rp_strat[STRAT_UAntiTower] = rp_strat[STRAT_UAntiTower] + R2I(rp[STRAT_UAntiTower])
 
+  set rp_strat[STRAT_NormalUndead] = -100
+  set rp_strat[STRAT_Banshee] = -100
+  set rp_strat[STRAT_Necro] = -100
   set rp_strat[STRAT_Ghouls] = -100
   set rp_strat[STRAT_Fiends] = -100
+  set rp_strat[STRAT_Aboms] = -100
   set rp_strat[STRAT_MeatFiends] = -100
-  set rp_strat[STRAT_TempleMix] = -100
+  set rp_strat[STRAT_MassDestroyer] = -100
+  set rp_strat[STRAT_CryptMix] = -100
+  set rp_strat[STRAT_UAntiTower] = -100
   
   call finish_strategy_change()
 endfunction
@@ -2023,10 +2035,10 @@ function global_build_sequence takes nothing returns nothing
     call BuildUnit(2, merc_caster, 40)
 
     // Harassing
-    call Harass(2, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(GHOUL) > 10, 50, 120)
+    call Harass(2, HARASS_TARGET_PEONS, false, 100, 0.00, 0, TownCountDone(GHOUL) >= 2, 50, 120)
     //call Harass(1, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) == RACE_NIGHTELF and TownCount(GHOUL) > 1, 10, 40)
-	call Harass(1, HARASS_TARGET_PEONS, true, 5, 0.00, 0, TownCount(GHOUL) >= 1, 10, 40)
-    call Harass(3, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(GARGOYLE) > 4, 80, 120)
+	call Harass(1, HARASS_TARGET_PEONS, false, 100, 0.00, 0, TownCount(GHOUL) >= 1, 5, 40)
+    call Harass(3, HARASS_TARGET_PEONS, true, 500, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(GARGOYLE) > 4, 80, 120)
 
 
 
@@ -2196,10 +2208,10 @@ endfunction
 //============================================================================
 function init_strategy_Wyrms takes nothing returns nothing
     call AddBlock(1, NECROPOLIS_2, false, 1, ZIGGURAT_1, 60)
-
-    call AddHarass(3, 2, GHOUL)
+	call AddBlock(1, UNDEAD_ALTAR, false, 1, CRYPT, 60)
+    call AddHarass(1, 1, GHOUL)
     call AddHarass(3, 1, CRYPT_FIEND)
-    set distraction_group = 3
+    set distraction_group = 1
 
 
 
@@ -2248,7 +2260,7 @@ if tier == 3 then
 elseif tier == 2 then
 
       call BuildUnit(2, GHOUL, 90)
-      call BuildUnit(10, CRYPT_FIEND, 40)
+      call BuildUnit(8, CRYPT_FIEND, 40)
       call BuildUnit(1, hero[1], 80)
       call BuildUnit(1, hero[2], 60)
       call BuildUnit(1, NECROPOLIS_3, 50)
@@ -2275,7 +2287,7 @@ else
 
       call BuildUnit(3, GHOUL, 90)
       call BuildUnit(10, CRYPT_FIEND, 40)
-      call BuildUnit(1, hero[1], 80)
+      call BuildUnit(1, hero[1], 100)
       call BuildUnit(1, NECROPOLIS_2, 50)
 
 
@@ -2302,8 +2314,9 @@ endfunction
 //============================================================================
 function init_strategy_Necro takes nothing returns nothing
 
-    call AddHarass(3, 2, NECRO)
-    set distraction_group = 3
+    call AddHarass(1, 1, GHOUL)
+	call AddHarass(2, 2, GHOUL)
+    set distraction_group = 1
 
 
 
@@ -2731,9 +2744,9 @@ endfunction
 //  build_sequence
 //============================================================================
 function init_strategy_GargWyrm takes nothing returns nothing
-
-    call AddHarass(3, 2, GARGOYLE)
-    set distraction_group = 3
+	call AddBlock(1, UNDEAD_ALTAR, false, 1, CRYPT, 60)
+    call AddHarass(1, 1, GHOUL)
+    set distraction_group = 1
 
 
 
@@ -2811,7 +2824,7 @@ else
 
       call BuildUnit(8, GHOUL, 42)
       call BuildUnit(3, GHOUL, 90)
-      call BuildUnit(1, hero[1], 80)
+      call BuildUnit(1, hero[1], 150)
       call BuildUnit(1, NECROPOLIS_2, 50)
 
 
@@ -3302,34 +3315,9 @@ endif
 endfunction
 
 function init_strategy_TempleMix takes nothing returns nothing
-    call AddHarass(3, 1, NECRO)
-    call AddHarass(3, 2, BANSHEE)
-    set distraction_group = 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	call AddBlock(1, UNDEAD_ALTAR, false, 1, CRYPT, 60)
+    call AddHarass(1, 1, GHOUL)
+    set distraction_group = 1
 endfunction
 function build_sequence_TempleMix takes nothing returns nothing
 if tier == 3 then
@@ -3407,7 +3395,7 @@ else
       call BuildUnit(5, GHOUL, 35)
       call BuildUnit(1, CRYPT_FIEND, 37)
       call BuildUnit(1, NECROPOLIS_2, 35)
-      call BuildUnit(1, hero[1], 80)
+      call BuildUnit(1, hero[1], 100)
       call BuildUnit(1, TOMB_OF_RELICS, 15)
 
 

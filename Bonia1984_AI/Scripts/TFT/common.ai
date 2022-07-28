@@ -12203,6 +12203,26 @@ function GetNearestEnemyToLoc_k takes location l returns player
   return min_p
 endfunction
 
+function GetNearestElfEnemyToLoc_k takes location l returns player
+  local integer i = 0
+  local real nr = 0
+  local real min_nr = 1000000
+  local player min_p = null
+  
+  loop
+    exitwhen i >= 12
+    if GetPlayerRace(Player(i)) == RACE_NIGHTELF and IsPlayerEnemy(Player(i), ai_player) and GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING and not IsPlayerObserver(Player(i)) then
+      set nr = DistanceBetweenPoints_dk(GetPlayerStartLocationLoc(Player(i)), l)
+      if nr < min_nr then
+        set min_nr = nr
+        set min_p = Player(i)
+      endif
+    endif
+    set i = i + 1
+  endloop
+  return min_p
+endfunction
+
 function GetNearestEnemyToLoc_d takes location l returns player
   local integer i = 0
   local real nr = 0
@@ -17488,8 +17508,18 @@ endfunction
 function GetHarassPeonTarget takes unit u returns unit
   local group g = CreateGroup()
   local location unitloc = GetUnitLoc(u)
-  local player p = GetNearestEnemyToLoc_k(unitloc)
+  local player p = null
   local unit tempu = null
+  
+  if GetUnitTypeId(u) == old_id[racial_ghoul] then
+    set p = GetNearestElfEnemyToLoc_k(unitloc)  
+  endif
+  
+  if p == null then    
+    set p = GetNearestEnemyToLoc_k(unitloc)
+  else
+    call Trace("GetNearestElfEnemyToLoc_k = true!")
+  endif
   
   call GroupEnumUnitsOfPlayer(g, p, null)
   set g = SelectUnittype(g, UNIT_TYPE_PEON, true)
@@ -17769,6 +17799,7 @@ function HarassJob takes integer ht, unit targ, group harasser returns nothing
 	  //call TQAddGroupJob(30, HARASS, ht, target, harasser)
     endif
   else
+    //精灵族
     call CreateDebugTag("HARASS: Target Dead", 10, target, 3.00, 1.50)
     call GroupPointOrder(harasser, "move", GetLocationX(home_location), GetLocationY(home_location))
 	call SaveBoolean(additional_info, key, STATE_RETREAT, true)
@@ -19613,171 +19644,171 @@ endfunction
 
 
 function TQDoJob takes integer jid, integer par, unit unit_par, group group_par returns nothing
-if jid < 23 then
-if jid < 13 then
-if jid < 4 then
-if jid < 2 then
-if jid < 1 then
-call ZeppelinMoveJob(par, unit_par, group_par)
- else
-call TeleportJob(unit_par)
- endif
- else
-if jid < 3 then
-call TownTrackJob()
- else
-call ChatVarsJob()
- endif
- endif
- else
-if jid < 11 then
-if jid < 8 then
-if jid < 7 then
-if jid < 6 then
-if jid < 5 then
-call RevealEnemy()
- else
-call Chat(par)
- endif
- else
-call CleanupBlocksJob()
- endif
- else
-call NeutralGuardedJob(par)
- endif
- else
-if jid < 9 then
-call ResetWindWalkerGuardPosition(unit_par)
- else
-if jid < 10 then
-call SellZigguratJob()
- else
-call ExchangeJob()
- endif
- endif
- endif
- else
-if jid < 12 then
-call ZeppelinFollowJob()
- else
-call ResetGuardPositionJob(unit_par)
- endif
- endif
- endif
- else
-if jid < 17 then
-if jid < 15 then
-if jid < 14 then
-call BuyItemJob(par)
- else
-call HealthFountainJob(unit_par, par)
- endif
- else
-if jid < 16 then
-call ManaFountainJob(unit_par, par)
- else
-call NeutralEnemyCheckJob(par)
- endif
- endif
- else
-if jid < 19 then
-if jid < 18 then
-call MoonWellJob(unit_par, par)
- else
-call SendUnitHomeJob(unit_par, par)
- endif
- else
-if jid < 21 then
-if jid < 20 then
-call BuyNeutral(par)
- else
-call BuyNeutralHero(par)
- endif
- else
-if jid < 22 then
-call UpdateStrengthJob()
- else
-call DetectDefeatJob()
- endif
- endif
- endif
- endif
- endif
- else
-if jid < 36 then
-if jid < 31 then
-if jid < 27 then
-if jid < 25 then
-if jid < 24 then
-call DetectDoubleExpJob()
- else
-call WispCheckJob()
- endif
- else
-if jid < 26 then
-call MicroUnitsJob()
- else
-call MilitiaCheckJob()
- endif
- endif
- else
-if jid < 29 then
-if jid < 28 then
-call TowerRushJob()
- else
-call FocusFireJob()
- endif
- else
-if jid < 30 then
-call FastBuild()
- else
-call TryMilitiaExpansionFoot()
- endif
- endif
- endif
- else
-if jid < 35 then
-if jid < 34 then
-if jid < 32 then
-call BuildExpansionJob(unit_par)
- else
-if jid < 33 then
-call RallypointJob()
- else
-call AncientExpansionJob()
- endif
- endif
- else
-call HarassJob(par, unit_par, group_par)
- endif
- else
-call MicroHeroJob(par)
- endif
- endif
- else
-if jid < 37 then
-call RetreatControlJob()
- else
-if jid < 39 then
-if jid < 38 then
-call ArmyTrackJob()
- else
-call TowerRushCheck()
- endif
- else
-if jid < 40 then
-call AncientExpansionCheck()
- else
-if jid < 41 then
-call RepairControlJob()
- else
-call ResetByHealthJob(unit_par, par)
- endif
- endif
- endif
- endif
- endif
- endif
+	if jid < 23 then
+		if jid < 13 then
+			if jid < 4 then
+				if jid < 2 then
+					if jid < 1 then
+						call ZeppelinMoveJob(par, unit_par, group_par)
+					else
+						call TeleportJob(unit_par)
+					endif
+				else
+					if jid < 3 then
+						call TownTrackJob()
+					else
+						call ChatVarsJob()
+					endif
+				endif
+			else
+				if jid < 11 then
+					if jid < 8 then
+						if jid < 7 then
+							if jid < 6 then
+								if jid < 5 then
+									call RevealEnemy()
+								else
+									call Chat(par)
+								endif
+							else
+								call CleanupBlocksJob()
+							endif
+						else
+							call NeutralGuardedJob(par)
+						endif
+					else
+						if jid < 9 then
+							call ResetWindWalkerGuardPosition(unit_par)
+						else
+							if jid < 10 then
+								call SellZigguratJob()
+							else
+								call ExchangeJob()
+							endif
+						endif
+					endif
+				else
+					if jid < 12 then
+						call ZeppelinFollowJob()
+					else
+						call ResetGuardPositionJob(unit_par)
+					endif
+				endif
+			endif
+		else
+			if jid < 17 then
+				if jid < 15 then
+					if jid < 14 then
+						call BuyItemJob(par)
+					else
+						call HealthFountainJob(unit_par, par)
+					endif
+				else
+					if jid < 16 then
+						call ManaFountainJob(unit_par, par)
+					else
+						call NeutralEnemyCheckJob(par)
+					endif
+				endif
+			else
+				if jid < 19 then
+					if jid < 18 then
+						call MoonWellJob(unit_par, par)
+					else
+						call SendUnitHomeJob(unit_par, par)
+					endif
+				else
+					if jid < 21 then
+						if jid < 20 then
+							call BuyNeutral(par)
+						else
+							call BuyNeutralHero(par)
+						endif
+					else
+						if jid < 22 then
+							call UpdateStrengthJob()
+						else
+							call DetectDefeatJob()
+						endif
+					endif
+				endif
+			endif
+		endif
+	else
+		if jid < 36 then
+			if jid < 31 then
+				if jid < 27 then
+					if jid < 25 then
+						if jid < 24 then
+							call DetectDoubleExpJob()
+						else
+							call WispCheckJob()
+						endif
+					else
+						if jid < 26 then
+							call MicroUnitsJob()
+						else
+							call MilitiaCheckJob()
+						endif
+					endif
+				else
+					if jid < 29 then
+						if jid < 28 then
+							call TowerRushJob()
+						else
+							call FocusFireJob()
+						endif
+					else
+						if jid < 30 then
+							call FastBuild()
+						else
+							call TryMilitiaExpansionFoot()
+						endif
+					endif
+				endif
+			else
+				if jid < 35 then
+					if jid < 34 then
+						if jid < 32 then
+							call BuildExpansionJob(unit_par)
+						else
+							if jid < 33 then
+								call RallypointJob()
+							else
+								call AncientExpansionJob()
+							endif
+						endif
+					else
+						call HarassJob(par, unit_par, group_par)
+					endif
+				else
+					call MicroHeroJob(par)
+				endif
+			endif
+		else
+			if jid < 37 then
+				call RetreatControlJob()
+			else
+				if jid < 39 then
+					if jid < 38 then
+						call ArmyTrackJob()
+					else
+						call TowerRushCheck()
+					endif
+				else
+					if jid < 40 then
+						call AncientExpansionCheck()
+					else
+						if jid < 41 then
+							call RepairControlJob()
+						else
+							call ResetByHealthJob(unit_par, par)
+						endif
+					endif
+				endif
+			endif
+		endif
+	endif
 endfunction
 
 function TQHandleOnce takes nothing returns boolean
