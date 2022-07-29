@@ -2214,9 +2214,6 @@ location militia_loc = null
     timer udg_debug_timer = CreateTimer()
 	boolean job_debug = false	// Job system reports will be displayed (used for finding thread crashes)
 	integer debug_player = 1
-	
-	integer g_enemy_strength = 0
-	integer g_ally_strength = 0
 
 		integer array dyanti_air
 		integer totalanti_air = 0
@@ -15207,21 +15204,21 @@ function set_aggression takes nothing returns nothing
   elseif f >= 88 then
     set added_aggression = 30//20
   elseif f >= 80 then
-    set added_aggression = 25//12
+    set added_aggression = 24//12
   elseif f >= 70 then
-    set added_aggression = 22//10
+    set added_aggression = 20//10
   elseif f >= 60 then
-    set added_aggression = 20//8
+    set added_aggression = 16//8
   elseif f >= 50 then
-    set added_aggression = 18//7
+    set added_aggression = 14//7
   elseif f >= 40 then
-    set added_aggression = 16//6
+    set added_aggression = 12//6
   elseif f >= 30 then
-    set added_aggression = 13//5
+    set added_aggression = 10//5
   elseif f >= 20 then
-    set added_aggression = 10 //2
+    set added_aggression = 4 //2
   elseif f >= 10 then
-	set added_aggression = 5 //0
+	set added_aggression = 0 //0
   else
     set added_aggression = 0
   endif
@@ -16086,24 +16083,15 @@ function CheckDefeated takes nothing returns nothing
   call DestroyGroup(g)
   set g = null
 
-	set g_enemy_strength = 0
-
   if c_ally_total > 1 then
   loop
  	exitwhen i >= 12
 	if IsPlayerAlly(ai_player,Player(i)) then
 		set ally_sum = ally_sum + GetPlayerStrength(Player(i))
 	endif
-	if IsPlayerEnemy(ai_player, Player(i)) then
-		set g_enemy_strength = g_enemy_strength + R2I(GetPlayerStrength(Player(i)))
-	endif
-	
-    set i = i + 1
+      set i = i + 1
   endloop
   endif
-  
-  //set g_enemy_strength = R2I(enemy_sum)
-  set g_ally_strength = R2I(ally_sum)
 
   if GetPlayerUnitCount(ai_player, true) == 0 and GetPlayerStructureCount(ai_player, true) == 0 then
 	call KillYourself(no_ai_ally)	
@@ -17516,9 +17504,7 @@ function GetHarassPeonTarget takes unit u returns unit
   endif
   
   if p == null then    
-    set p = GetNearestEnemyToLoc_k(unitloc)
-  else
-    call Trace("GetNearestElfEnemyToLoc_k = true!")
+    set p = GetNearestEnemyToLoc_k(unitloc)  
   endif
   
   call GroupEnumUnitsOfPlayer(g, p, null)
@@ -24501,7 +24487,7 @@ function CreepAttack takes integer str returns nothing
       return
     endif
     call Chat(C_Creep)
-    if air_strength > 40 then
+    if air_strength > 20 then
       call SetAllianceTarget(target)
     endif
 	
@@ -24712,11 +24698,11 @@ function IsTargetGood takes unit target, integer attacker_bonus returns boolean
   set added_target_aggression = attacker_bonus
   set added_racial_aggression = GetRaceAggression(target)
   if target != null then
-	call Trace("IsTargetGood: g_enemy_strength(" + Int2Str(g_enemy_strength) + ") g_ally_strength+own(" + Int2Str(g_ally_strength + own_strength) + ") GetTargetStrength("+ Int2Str(GetTargetStrength(target)) + ") GetTowerFactor/3(" + Int2Str(GetTowerFactor(target) / 3) + ") own_strength(" + Int2Str(own_strength) + ") aggresss(" + Int2Str(attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus) + ")")
+	//call Trace("IsTargetGood: g_enemy_strength(" + Int2Str(g_enemy_strength) + ") g_ally_strength+own(" + Int2Str(g_ally_strength + own_strength) + ") GetTargetStrength("+ Int2Str(GetTargetStrength(target)) + ") GetTowerFactor/3(" + Int2Str(GetTowerFactor(target) / 3) + ") own_strength(" + Int2Str(own_strength) + ") aggresss(" + Int2Str(attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus) + ")")
 	//return g_enemy_strength <= g_ally_strength + own_strength and GetTargetStrength(target) + GetTowerFactor(target) / 3 <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
-	return GetTargetStrength(target) + GetTowerFactor(target) / 3 <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
+	//return GetTargetStrength(target) + GetTowerFactor(target) / 3 <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
 	//attacking_aggression:fixed+player;   set_aggression:set_aggression() by foodused;   added_racial_aggression:?    attacker_bonus:player p_comp_chosen_target_bonus
-	//return GetTargetStrength(target) + GetEnemyAllyStrength(GetOwningPlayer(target)) + GetTowerFactor(target) <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
+	return GetTargetStrength(target) + GetEnemyAllyStrength(GetOwningPlayer(target)) + GetTowerFactor(target) <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
   else
 	return false
   endif
@@ -24778,7 +24764,8 @@ function ChooseAnyEnemyTarget takes nothing returns unit
       set target_enemy = GetFFAEnemy()
 	  call Trace("Choosing FFA Enemy")	  
     else
-      set target_enemy = GetWeakAndNearEnemy()
+      //set target_enemy = GetWeakAndNearEnemy()
+      set target_enemy = GetFFAEnemy()
 	  call Trace("Choosing weakest closest Enemy")
     endif
 	
@@ -24826,17 +24813,12 @@ function ChooseAttackTarget takes nothing returns unit
 			//call Trace("ChooseEnemyExpansionTarget:ChooseEnemyExpansionTarget=null")
 			set target = ChooseEnemyExpansionTarget()
 		endif
-			
+		set alli_target = target	
     endif	
 
     if target == null then
       set target = ChooseAnyEnemyTarget()
     endif
-	if target == null then
-		call Trace("ChooseAttackTarget:target=null")
-	else
-		set alli_target = target
-	endif
     return target
 endfunction
 
@@ -25129,7 +25111,36 @@ if not creeping_only then	// Do the normal attack sequence
       return
     endif
     
+    if not (no_creep_attack or ai_no_creep) then
 
+      // take expansions as needed
+      //
+      if needs_exp then
+        if first_expansion_chosen and (current_expansion == null or CheckExpansionTaken(current_expansion)) then
+          call ChooseExpansion()
+          if current_expansion == null then
+            return
+          endif
+        endif
+        set creep = GetExpFoe()
+        if creep != null and UnitAlive(creep) then
+          call Trace("Creep the Expansion")
+          set attacking_expansion = true
+          set battle_radius = creep_battle_radius
+			//call SetAllianceTarget(creep)
+		  call Chat(C_Expansion)
+          call FormGroupAM(3)
+          call AttackMoveKillCreep(creep)
+	        if GetExpFoe() == null then
+            set take_exp = false
+	        endif
+			call Sleep(10)
+	        set attacking_expansion = false
+          return
+        endif
+      endif
+
+    endif
 
     // coordinate with allies
     //
@@ -25165,20 +25176,10 @@ if not creeping_only then	// Do the normal attack sequence
 				call AttackMoveKillAAM(mega)
 				return
 			endif
-		endif
+		endif	  
 	  
-	  
-      //if GetHeroXP(hero_unit[1]) < GetRandomInt(50,150) or GetHeroXP(hero_unit[1]) > GetRandomInt(300,850) or GetHeroXP(hero_unit[2]) > 450 or FoodUsed() > 40 then
-		
-		if GetHeroXP(hero_unit[1]) > 0 then 
-		
+        if GetHeroXP(hero_unit[1]) < GetRandomInt(50,150) or GetHeroXP(hero_unit[1]) > GetRandomInt(300,850) or GetHeroXP(hero_unit[2]) > 450 or FoodUsed() > 40 then			
 			set hall = ChooseAttackTarget()
-			if hall == null then 
-				//call Trace("=before chooseattcktarget failed:hall=null")		
-			elseif not UnitAlive(hall) then
-				//call Trace("=before chooseattcktarget failed:UnitAlive")
-			endif
-		
 			if hall != null and UnitAlive(hall) then
 				call SetChatVarsAttack(hall)
 				call Chat(C_Attack)
@@ -25188,41 +25189,8 @@ if not creeping_only then	// Do the normal attack sequence
 				call AttackMoveKillAAM(hall)
 				return		
 			endif
-
 		endif
-    endif
-	
-    if not (no_creep_attack or ai_no_creep) then
-
-      // take expansions as needed
-      //
-      if needs_exp then
-        if first_expansion_chosen and (current_expansion == null or CheckExpansionTaken(current_expansion)) then
-          call ChooseExpansion()
-          if current_expansion == null then
-            return
-          endif
-        endif
-        set creep = GetExpFoe()
-        if creep != null and UnitAlive(creep) then
-          call Trace("Creep the Expansion")
-          set attacking_expansion = true
-          set battle_radius = creep_battle_radius
-			//call SetAllianceTarget(creep)
-		  call Chat(C_Expansion)
-          call FormGroupAM(3)
-          call AttackMoveKillCreep(creep)
-	        if GetExpFoe() == null then
-            set take_exp = false
-	        endif
-			call Sleep(10)
-	        set attacking_expansion = false
-          return
-        endif
-      endif
-
-    endif
-
+    endif	
 endif // if not creep only
 	
     if no_creep_attack or ai_no_creep then

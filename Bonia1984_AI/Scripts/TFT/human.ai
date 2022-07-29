@@ -3278,7 +3278,7 @@ function main takes nothing returns nothing
     set race_militia_unitstring = "militia"
     set race_militiaworker_unitstring = "peasant"
     set use_militia_only_on_bigger_threats = false
-    set race_ancient_expansion_available = false
+    set race_ancient_expansion_available = true
     set race_ancient_expansion_probability = 50
     set race_ancient_expansion_strength = 15
     set race_ancient_expansion_help_id = 'earc'
