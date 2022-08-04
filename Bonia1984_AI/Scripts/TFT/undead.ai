@@ -443,8 +443,8 @@ function BuildPriorities takes nothing returns nothing
         call SetBuildAll( BUILD_UNIT, 5, 'ucry', -1 )
         call SetBuildAll( BUILD_UNIT, 6, 'ucry', -1 )
     endif
-    if (( ( ( GetMinesOwned(  ) < 2 ) and ( TownThreatened(  ) == false ) ) and ( ( GetUnitCountDone( 'ucry' ) >= 4 ) and ( ( GetUnitCountDone( 'uaco' ) >= 5 ) and ( CaptainReadinessHP(  ) >= 80 ) ) ) )) then
-        //call BuildExpansion( 'unpl', 'ugol' )
+    if (( ( ( GetMinesOwned(  ) < 2 ) and ( TownThreatened(  ) == false ) ) and ( ( GetUnitCountDone( 'ucry' ) >= 4 ) and ( ( GetUnitCountDone( 'uaco' ) >= 5 ) and ( CaptainReadinessHP(  ) >= 80 ) and FoodUsed() >= 80) ) )) then
+        call BuildExpansion( 'unpl', 'ugol' )
     endif
     if (( ( ( GetMinesOwned(  ) < 2 ) and ( TownThreatened(  ) == false ) ) and ( ( GetUnitCountDone( 'ucry' ) >= 4 ) and ( ( GetUnitCountDone( 'uaco' ) >= 5 ) and ( GetUnitCountDone( 'ufro' ) > 0 ) ) ) )) then
         //call BuildExpansion( 'unpl', 'ugol' )
