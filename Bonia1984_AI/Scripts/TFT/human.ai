@@ -2160,10 +2160,7 @@ function global_build_sequence takes nothing returns nothing
           // Harass
           call Harass(1, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(FOOTMAN) > 6, 50, 80)
           call Harass(3, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(GRYPHON) > 4, 80, 100)
-		  call Harass(2, HARASS_TARGET_PEONS, false, 10, 0.00, 0, TownCountDone(FOOTMAN) >= 2, 10, 80)
-
-
-
+		  call Harass(2, HARASS_TARGET_PEONS, false, 10, 0.00, 0, TownCountDone(FOOTMAN) >= 2, GetRandomInt(10,30), 80)
 
 
 

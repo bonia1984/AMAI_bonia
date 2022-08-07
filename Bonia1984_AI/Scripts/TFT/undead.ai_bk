@@ -2037,47 +2037,18 @@ function global_build_sequence takes nothing returns nothing
     // Harassing
     call Harass(2, HARASS_TARGET_PEONS, false, 100, 0.00, 0, TownCountDone(GHOUL) >= 2, 50, 120)
     //call Harass(1, HARASS_TARGET_PEONS, true, 5, 0.75, 0, GetPlayerRace(nearest_enemy) == RACE_NIGHTELF and TownCount(GHOUL) > 1, 10, 40)
-	call Harass(1, HARASS_TARGET_PEONS, false, 100, 0.00, 0, TownCount(GHOUL) >= 1, 5, 40)
+	if GetPlayerRace(nearest_enemy) == RACE_NIGHTELF then
+		call Harass(1, HARASS_TARGET_PEONS, false, 100, 0.00, 0, TownCount(GHOUL) >= 1, 11, 40)
+	else
+		call Harass(1, HARASS_TARGET_PEONS, false, 100, 0.00, 0, TownCount(GHOUL) >= 1, 6, 40)
+	endif
     call Harass(3, HARASS_TARGET_PEONS, true, 500, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(GARGOYLE) > 4, 80, 120)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	if ai_time >= 100 then
+		call Trace("ai_time:" + Int2Str(ai_time))
+	endif
 
 
 endfunction
@@ -2260,7 +2231,7 @@ if tier == 3 then
 elseif tier == 2 then
 
       call BuildUnit(2, GHOUL, 90)
-      call BuildUnit(8, CRYPT_FIEND, 40)
+      call BuildUnit(8, CRYPT_FIEND, 50)
       call BuildUnit(1, hero[1], 80)
       call BuildUnit(1, hero[2], 60)
       call BuildUnit(1, NECROPOLIS_3, 50)
@@ -2286,7 +2257,7 @@ elseif tier == 2 then
 else
 
       call BuildUnit(3, GHOUL, 90)
-      call BuildUnit(10, CRYPT_FIEND, 40)
+      call BuildUnit(10, CRYPT_FIEND, 50)
       call BuildUnit(1, hero[1], 100)
       call BuildUnit(1, NECROPOLIS_2, 50)
 

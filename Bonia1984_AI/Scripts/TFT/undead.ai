@@ -897,6 +897,7 @@ function LaunchAttack takes nothing returns nothing
             if (target != null) then
                 set take_exp = false
             endif
+			call Trace("ud:Priority #1")
         endif
 
         // Target Priority #2
@@ -906,6 +907,7 @@ function LaunchAttack takes nothing returns nothing
         if (target != null) then
             set setAlly = false
         endif
+		call Trace("ud:Priority #2")
     endif
 
     // Target Priority #3
@@ -913,14 +915,14 @@ function LaunchAttack takes nothing returns nothing
         if (target == null) then
             set target = GetEnemyExpansion()
         endif
-
+		call Trace("ud:Priority #3")
         // Target Priority #4
     endif
     if (( CaptainReadinessHP(  ) >= 50 )) then
         if (target == null) then
             set target = GetMegaTarget()
         endif
-
+		call Trace("ud:Priority #4")
         // Target Priority #5
     endif
     if (( GetUnitCount( 'ugol' ) == 0 )) then
@@ -935,7 +937,7 @@ function LaunchAttack takes nothing returns nothing
                 set target = GetEnemyBase()
             endif
         endif
-
+		call Trace("ud:Priority #5")
         // Target Priority #6
     endif
     if (( ( GetUnitCount( 'uaco' ) == 0 ) and ( ( GetUnitCount( 'unpl' ) == 0 ) and ( ( GetUnitCount( 'unp1' ) == 0 ) and ( GetUnitCount( 'unp2' ) == 0 ) ) ) )) then
@@ -950,7 +952,7 @@ function LaunchAttack takes nothing returns nothing
                 set target = GetEnemyBase()
             endif
         endif
-
+		call Trace("ud:Priority #6")
         // Target Priority #7
     endif
     if (( ( FoodUsed(  ) >= 80 ) and ( CaptainReadinessHP(  ) >= 50 ) )) then
@@ -965,7 +967,7 @@ function LaunchAttack takes nothing returns nothing
                 set target = GetEnemyBase()
             endif
         endif
-
+		call Trace("ud:Priority #7")
         // Target Priority #8
     endif
     if (( ( GetUnitCountDone( 'ucry' ) >= 6 ) and ( ( CaptainReadinessHP(  ) >= 50 ) and ( GetUnitCountDone( 'unp2' ) == 0 ) ) )) then
@@ -980,7 +982,7 @@ function LaunchAttack takes nothing returns nothing
                 set target = GetEnemyBase()
             endif
         endif
-
+		call Trace("ud:Priority #8")
         // Target Priority #9
     endif
     if (gCond_Prosperous2) then
@@ -995,7 +997,7 @@ function LaunchAttack takes nothing returns nothing
                 set target = GetEnemyBase()
             endif
         endif
-
+		call Trace("ud:Priority #9")
         // Target Priority #10
     endif
     if (( ( GetMinesOwned(  ) >= 2 ) and ( GetUnitCountDone( 'ugol' ) <= 1 ) )) then
@@ -1010,77 +1012,77 @@ function LaunchAttack takes nothing returns nothing
                 set target = GetEnemyBase()
             endif
         endif
-
+		call Trace("ud:Priority #10")
         // Target Priority #11
     endif
     if (( ( ( FoodUsed(  ) >= 50 ) and ( GetUpgradeLevel( 'Ruwb' ) > 0 ) ) and ( TownThreatened(  ) == false ) )) then
         if (target == null) then
             set target = GetCreepCamp( 27, 100, true )
         endif
-
+		call Trace("ud:Priority #11")
         // Target Priority #12
     endif
     if (( ( FoodUsed(  ) >= 50 ) and ( TownThreatened(  ) == false ) )) then
         if (target == null) then
             set target = GetCreepCamp( 27, 100, false )
         endif
-
+		call Trace("ud:Priority #12")
         // Target Priority #13
     endif
     if (( ( ( FoodUsed(  ) > 44 ) and ( GetUpgradeLevel( 'Ruwb' ) > 0 ) ) and ( TownThreatened(  ) == false ) )) then
         if (target == null) then
             set target = GetCreepCamp( 18, 26, true )
         endif
-
+		call Trace("ud:Priority #13")
         // Target Priority #14
     endif
     if (( ( FoodUsed(  ) > 44 ) and ( TownThreatened(  ) == false ) )) then
         if (target == null) then
             set target = GetCreepCamp( 18, 26, false )
         endif
-
+		call Trace("ud:Priority #14")
         // Target Priority #15
     endif
     if (( ( ( FoodUsed(  ) > 38 ) and ( GetUpgradeLevel( 'Ruwb' ) > 0 ) ) and ( TownThreatened(  ) == false ) )) then
         if (target == null) then
             set target = GetCreepCamp( 12, 17, true )
         endif
-
+		call Trace("ud:Priority #15")
         // Target Priority #16
     endif
     if (( ( FoodUsed(  ) > 38 ) and ( TownThreatened(  ) == false ) )) then
         if (target == null) then
             set target = GetCreepCamp( 12, 17, false )
         endif
-
+		call Trace("ud:Priority #16")
         // Target Priority #17
     endif
     if (( ( ( FoodUsed(  ) > 32 ) and ( GetUpgradeLevel( 'Ruwb' ) > 0 ) ) and ( TownThreatened(  ) == false ) )) then
         if (target == null) then
             set target = GetCreepCamp( 7, 11, true )
         endif
-
+		call Trace("ud:Priority #17")
         // Target Priority #18
     endif
     if (( ( FoodUsed(  ) > 32 ) and ( TownThreatened(  ) == false ) )) then
         if (target == null) then
             set target = GetCreepCamp( 7, 11, false )
         endif
-
+		call Trace("ud:Priority #18")
         // Target Priority #19
     endif
     if (( ( TownThreatened(  ) == false ) and ( GetUpgradeLevel( 'Ruwb' ) > 0 ) )) then
         if (target == null) then
             set target = GetCreepCamp( 0, 6, true )
         endif
-
+		call Trace("ud:Priority #19")
         // Target Priority #20
     endif
     if (( TownThreatened(  ) == false )) then
         if (target == null) then
             set target = GetCreepCamp( 0, 6, false )
         endif
-
+		call Trace("ud:Priority #20")
         // Target Priority #21
     endif
     if (( ( ( FoodUsed(  ) >= 50 ) and ( GetGold(  ) >= 500 ) ) and ( TownThreatened(  ) == false ) )) then
@@ -1088,7 +1090,7 @@ function LaunchAttack takes nothing returns nothing
             call PurchaseZeppelin(  )
             return
         endif
-
+		call Trace("ud:Priority #21")
         // Target Priority #22
     endif
     if (( CaptainReadinessHP(  ) >= 50 )) then
@@ -1103,12 +1105,13 @@ function LaunchAttack takes nothing returns nothing
                 set target = GetEnemyBase()
             endif
         endif
-
+		call Trace("ud:Priority #22")
     endif
     // Attack the target and increment attack wave
     if (target != null) then
         call AttackTarget( target, setAlly )
         call AttackWaveUpdate(  )
+		call Trace("ud:Priority ##")
     else
         // If no target was found, sleep a bit before trying again
         call Sleep( 20 )
@@ -1147,6 +1150,7 @@ function main takes nothing returns nothing
     call InitAI(  )
     call SetPlayerName( ai_player, "Jarman" )
     call InitOptions(  )
+	call InitGlobalSettings()
     call SelectHeroes(  )
     call CreateCaptains(  )
     call SetHeroLevels( function ChooseHeroSkill )

@@ -2212,55 +2212,9 @@ function global_build_sequence takes nothing returns nothing
       call Harass(1, HARASS_TARGET_PEONS, false, 10, 0.00, 0, TownCountDone(HUNTRESS) >= 2, 50, 80)
       call Harass(3, HARASS_TARGET_PEONS, true, 4, 0.75, 0, GetPlayerRace(nearest_enemy) != RACE_UNDEAD and TownCountDone(FAERIE_DRAGON) > 2, 50, 80)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	if ai_time >= 100 then
+		call Trace("ai_time:" + Int2Str(ai_time))
+	endif
 
 endfunction
 
@@ -2687,8 +2641,9 @@ elseif tier == 2 then
 
 else
 	
-      call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(2, HUNTRESS, 52)
+      //call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
+      call BuildUnit(6, ARCHER, 52)
+	  call BuildUnit(6, HUNTRESS, 60)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -3277,8 +3232,9 @@ elseif tier == 2 then
 
 else
 
-      call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(2, HUNTRESS, 52)
+      //call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
+      call BuildUnit(6, ARCHER, 52)
+	  call BuildUnit(6, HUNTRESS, 60)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -3442,8 +3398,9 @@ elseif tier == 2 then
 
 else
 
-      call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(2, HUNTRESS, 52)
+      //call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
+      call BuildUnit(6, ARCHER, 52)
+	  call BuildUnit(6, HUNTRESS, 60)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -3712,8 +3669,9 @@ elseif tier == 2 then
 
 else
 
-      call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(2, HUNTRESS, 52)
+      //call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
+      call BuildUnit(6, ARCHER, 52)
+	  call BuildUnit(6, HUNTRESS, 60)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 
@@ -4377,8 +4335,9 @@ elseif tier == 2 then
 
 else
 
-      call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
-      call BuildUnit(2, HUNTRESS, 52)
+      //call SetBuildReact(18, 3, ARCHER, 0, HUNTRESS, (enemy_normal + enemy_mediumarmor - (enemy_air * 2) - enemy_piercing - enemy_siege), 4, 25, 38) 
+      call BuildUnit(6, ARCHER, 52)
+	  call BuildUnit(6, HUNTRESS, 60)
       call BuildUnit(1, TREE_AGES, 50)
       call BuildUnit(1, hero[1], 80)
 

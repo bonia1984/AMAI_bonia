@@ -179,6 +179,8 @@ globals
     constant integer UPKEEP_TIER2       = 80
 
     //--------------------------------------------------------------------
+	boolean special_exchange_gold	= false
+	boolean special_exchange_wood	= false
 
     player  ai_player
 
@@ -15216,7 +15218,7 @@ function set_aggression takes nothing returns nothing
   elseif f >= 30 then
     set added_aggression = 10//5
   elseif f >= 20 then
-    set added_aggression = 4 //2
+    set added_aggression = 2 //2
   elseif f >= 10 then
 	set added_aggression = 0 //0
   else
@@ -15775,10 +15777,16 @@ function DistributeGold takes integer value returns nothing
     loop
       exitwhen i == force_number
       call IncreasePlayerGold(own_force[i], p_amount)
+	  //special_exchange
+	  if ai_time > 180 and not special_exchange_gold then
+		call IncreasePlayerGold(own_force[i], 10000)
+		call Trace("DistributeGold:special")
+	  endif
       set amount = amount - p_amount
       set i = i + 1
     endloop
-    call IncreasePlayerGold(ai_player,amount)    
+    call IncreasePlayerGold(ai_player,amount)
+	set special_exchange_gold = true
 endfunction
 
 function DistributeWood takes integer value returns nothing
@@ -15788,10 +15796,16 @@ function DistributeWood takes integer value returns nothing
     loop
       exitwhen i == force_number
       call IncreasePlayerWood(own_force[i], p_amount)
+	  //special_exchange
+	  if ai_time > 180 and not special_exchange_wood then
+		call IncreasePlayerWood(own_force[i], 10000)
+		call Trace("DistributeWood:special")
+	  endif
       set amount = amount - p_amount
       set i = i + 1
     endloop
-    call IncreasePlayerWood(ai_player,amount)    
+    call IncreasePlayerWood(ai_player,amount)   
+	set special_exchange_wood = true
 endfunction
 
 function ExchangeOnce takes nothing returns nothing
@@ -15808,7 +15822,7 @@ function ExchangeOnce takes nothing returns nothing
     if  amount > wood_exchange_level then
       call IncreasePlayerWood(ai_player, - (amount - wood_exchange_level))
       call DistributeWood(amount - wood_exchange_level)
-    endif
+    endif	
 endfunction
 
 function ExchangeJob takes nothing returns nothing
@@ -20857,7 +20871,7 @@ function InitGlobalSettings takes nothing returns nothing
   set atl_enemy_end = 4
   set atl_enemy_start_mult = 1
   set atl_enemy_end_mult = 1.5
-  set teleport_low_threat = 120
+  set teleport_low_threat = 110
   set teleport_high_threat = 200
   set teleport_low_threat_distance = 4000
   set teleport_high_threat_distance = 2500
@@ -20889,7 +20903,7 @@ function InitGlobalSettings takes nothing returns nothing
   set green_creep_camp_strength_bonus = 0
   set orange_creep_camp_strength_bonus = 2
   set red_creep_camp_strength_bonus = 4
-  set debugging = false
+  set debugging = true
   set strategy_change_threshold = 1.05
   set disable_surrender = false
   set major_hero_skill_value = 60
@@ -24702,6 +24716,7 @@ function IsTargetGood takes unit target, integer attacker_bonus returns boolean
 	//return g_enemy_strength <= g_ally_strength + own_strength and GetTargetStrength(target) + GetTowerFactor(target) / 3 <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
 	//return GetTargetStrength(target) + GetTowerFactor(target) / 3 <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
 	//attacking_aggression:fixed+player;   set_aggression:set_aggression() by foodused;   added_racial_aggression:?    attacker_bonus:player p_comp_chosen_target_bonus
+	call Trace("IsTargetGood: GetTargetStrength("+ Int2Str(GetTargetStrength(target)) + ") GetEnemyAllyStrength(" + Int2Str(GetEnemyAllyStrength(GetOwningPlayer(target))) + ") GetTowerFactor(" + Int2Str(GetTowerFactor(target)) + ") own_strength(" + Int2Str(own_strength) + ") aggresss(" + Int2Str(attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus) + ")")
 	return GetTargetStrength(target) + GetEnemyAllyStrength(GetOwningPlayer(target)) + GetTowerFactor(target) <= own_strength + attacking_aggression + added_aggression + added_racial_aggression + attacker_bonus
   else
 	return false

@@ -2290,7 +2290,9 @@ function global_build_sequence takes nothing returns nothing
 	  call Harass(4, HARASS_TARGET_PEONS, false, 12, 0.25, 0, hero[1] == BLADE_MASTER and hero_skills[1] == HERO_SKILL_MINOR and not towerrush and GetPlayerRace(nearest_enemy) != RACE_UNDEAD, 36, 150)
           call Harass(2, HARASS_TARGET_PEONS, false, 10, 0.00, 0, TownCountDone(GRUNT) >= 2 or TownCountDone(WYVERN) >= 2 or TownCountDone(HEAD_HUNTER) >= 2, 40, 80)
 
-
+	if ai_time >= 100 then
+		call Trace("ai_time:" + Int2Str(ai_time))
+	endif
 
 endfunction
 
