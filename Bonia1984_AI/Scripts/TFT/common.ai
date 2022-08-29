@@ -15220,9 +15220,9 @@ function set_aggression takes nothing returns nothing
   elseif f >= 20 then
     set added_aggression = 2 //2
   elseif f >= 10 then
-	set added_aggression = 0 //0
+	set added_aggression = -10 //0
   else
-    set added_aggression = 0
+    set added_aggression = -10
   endif
 
   if GetUnitCountDone(old_id[hero[1]]) == 0 then
@@ -20880,7 +20880,7 @@ function InitGlobalSettings takes nothing returns nothing
   set shredder_peon_count = 9
   set minimum_peon_wood = 2000
   set maximum_peon_wood = 200
-  set ver_neutral_heroes_available = true
+  set ver_neutral_heroes_available = false
   set ver_neutral_hero_number = 8
   set ver_only_heroes_buy = false
   set ver_food_limit = 100
@@ -20903,7 +20903,7 @@ function InitGlobalSettings takes nothing returns nothing
   set green_creep_camp_strength_bonus = 0
   set orange_creep_camp_strength_bonus = 2
   set red_creep_camp_strength_bonus = 4
-  set debugging = true
+  set debugging = false
   set strategy_change_threshold = 1.05
   set disable_surrender = false
   set major_hero_skill_value = 60

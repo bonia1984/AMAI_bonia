@@ -913,7 +913,7 @@ function LaunchAttack takes nothing returns nothing
     // Target Priority #3
     if (( ( FoodUsed(  ) >= 50 ) and ( ( CaptainReadinessHP(  ) >= 50 ) and ( GetMinesOwned(  ) < 2 ) ) )) then
         if (target == null) then
-            set target = GetEnemyExpansion()
+            //set target = GetEnemyExpansion()
         endif
 		call Trace("ud:Priority #3")
         // Target Priority #4
@@ -927,7 +927,7 @@ function LaunchAttack takes nothing returns nothing
     endif
     if (( GetUnitCount( 'ugol' ) == 0 )) then
         if (target == null) then
-            set target = GetEnemyExpansion()
+            //set target = GetEnemyExpansion()
             if (target == null) then
                 call StartGetEnemyBase(  )
                 loop
@@ -942,7 +942,7 @@ function LaunchAttack takes nothing returns nothing
     endif
     if (( ( GetUnitCount( 'uaco' ) == 0 ) and ( ( GetUnitCount( 'unpl' ) == 0 ) and ( ( GetUnitCount( 'unp1' ) == 0 ) and ( GetUnitCount( 'unp2' ) == 0 ) ) ) )) then
         if (target == null) then
-            set target = GetEnemyExpansion()
+            //set target = GetEnemyExpansion()
             if (target == null) then
                 call StartGetEnemyBase(  )
                 loop
@@ -957,7 +957,7 @@ function LaunchAttack takes nothing returns nothing
     endif
     if (( ( FoodUsed(  ) >= 80 ) and ( CaptainReadinessHP(  ) >= 50 ) )) then
         if (target == null) then
-            set target = GetEnemyExpansion()
+            //set target = GetEnemyExpansion()
             if (target == null) then
                 call StartGetEnemyBase(  )
                 loop
@@ -972,7 +972,7 @@ function LaunchAttack takes nothing returns nothing
     endif
     if (( ( GetUnitCountDone( 'ucry' ) >= 6 ) and ( ( CaptainReadinessHP(  ) >= 50 ) and ( GetUnitCountDone( 'unp2' ) == 0 ) ) )) then
         if (target == null) then
-            set target = GetEnemyExpansion()
+            //set target = GetEnemyExpansion()
             if (target == null) then
                 call StartGetEnemyBase(  )
                 loop
@@ -987,7 +987,7 @@ function LaunchAttack takes nothing returns nothing
     endif
     if (gCond_Prosperous2) then
         if (target == null) then
-            set target = GetEnemyExpansion()
+            //set target = GetEnemyExpansion()
             if (target == null) then
                 call StartGetEnemyBase(  )
                 loop
@@ -1002,7 +1002,7 @@ function LaunchAttack takes nothing returns nothing
     endif
     if (( ( GetMinesOwned(  ) >= 2 ) and ( GetUnitCountDone( 'ugol' ) <= 1 ) )) then
         if (target == null) then
-            set target = GetEnemyExpansion()
+            //set target = GetEnemyExpansion()
             if (target == null) then
                 call StartGetEnemyBase(  )
                 loop
@@ -1095,7 +1095,7 @@ function LaunchAttack takes nothing returns nothing
     endif
     if (( CaptainReadinessHP(  ) >= 50 )) then
         if (target == null) then
-            set target = GetEnemyExpansion()
+            //set target = GetEnemyExpansion()
             if (target == null) then
                 call StartGetEnemyBase(  )
                 loop
